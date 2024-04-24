@@ -7,7 +7,8 @@ import java.util.function.BiConsumer;
  * A simple implementation of hash tables.
  *
  * @author Samuel A. Rebelsky
- * @author Your Name Here
+ * @author Tim Yu
+ * @author Connor Heagy
  */
 public class ProbedHashTable<K,V> implements HashTable<K,V> {
 
@@ -199,6 +200,12 @@ public class ProbedHashTable<K,V> implements HashTable<K,V> {
       expand();
     } // if there are too many entries
     // Find out where the key belongs and put the pair there.
+    for (int i = 0; i < this.pairs.length; i++) {
+      int index = (find(key) + i * (int) PROBE_OFFSET) % this.pairs.length;
+      if (this.pairs[index] != null && ((Pair<K,V>) this.pairs[index]).key().equals(key)) {
+        result = ((Pair<K,V>) this.pairs[index]).value();
+      }
+    }
     int index = find(key);
     if (this.pairs[index] != null) {
       result = ((Pair<K,V>) this.pairs[index]).value();
